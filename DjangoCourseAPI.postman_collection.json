@@ -1,0 +1,76 @@
+{
+  "info": {
+    "name": "Django Course Project",
+    "_postman_id": "1234-5678-9012-3456",
+    "description": "Postman collection for testing Django Course Enrollment project",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Register",
+      "request": {
+        "method": "POST",
+        "header": [
+          {"key": "Content-Type", "value": "application/json"}
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"username\": \"testuser\",\"email\": \"test@gmail.com\", \"password1\": \"test1234\",\"password2\": \"test1234\"}"
+        },
+        "url": {"raw": "http://127.0.0.1:8000/register/", "protocol": "http", "host": ["127.0.0.1"], "port": "8000", "path": ["register", ""]}
+      }
+    },
+    {
+      "name": "Login",
+      "request": {
+        "method": "POST",
+        "header": [{"key": "Content-Type", "value": "application/json"}],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"username\": \"testuser\", \"password\": \"test1234\"}"
+        },
+        "url": {"raw": "http://127.0.0.1:8000/login/", "protocol": "http", "host": ["127.0.0.1"], "port": "8000", "path": ["login", ""]}
+      }
+    },
+    {
+      "name": "Course List",
+      "request": {
+        "method": "GET",
+        "header": [{"key": "Content-Type", "value": "application/json"}],
+        "url": {"raw": "http://127.0.0.1:8000/", "protocol": "http", "host": ["127.0.0.1"], "port": "8000", "path": [""]}
+      }
+    },
+    {
+      "name": "Course Detail",
+      "request": {
+        "method": "GET",
+        "header": [{"key": "Content-Type", "value": "application/json"}],
+        "url": {"raw": "http://127.0.0.1:8000/course/2/", "protocol": "http", "host": ["127.0.0.1"], "port": "8000", "path": ["course","2",""]}
+      }
+    },
+    {
+      "name": "Enroll Course",
+      "request": {
+        "method": "POST",
+        "header": [{"key": "Content-Type", "value": "application/json"}],
+        "url": {"raw": "http://127.0.0.1:8000/courses/enroll/2/", "protocol": "http", "host": ["127.0.0.1"], "port": "8000", "path": ["courses","enroll","2",""]}
+      }
+    },
+    {
+      "name": "My Courses",
+      "request": {
+        "method": "GET",
+        "header": [{"key": "Content-Type", "value": "application/json"}],
+        "url": {"raw": "http://127.0.0.1:8000/my-courses/", "protocol": "http", "host": ["127.0.0.1"], "port": "8000", "path": ["my-courses",""]}
+      }
+    },
+    {
+      "name": "Logout",
+      "request": {
+        "method": "GET",
+        "header": [{"key": "Content-Type", "value": "application/json"}],
+        "url": {"raw": "http://127.0.0.1:8000/logout/", "protocol": "http", "host": ["127.0.0.1"], "port": "8000", "path": ["logout",""]}
+      }
+    }
+  ]
+}

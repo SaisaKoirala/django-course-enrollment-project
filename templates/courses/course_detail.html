@@ -1,0 +1,123 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow-sm rounded-4 border-0 overflow-hidden">
+
+                <!-- Course Image -->
+                {% if course.image %}
+                <div class="position-relative">
+                    <img src="{{ course.image.url }}" class="card-img-top" alt="{{ course.title }}" style="height: 300px; object-fit: cover;">
+                </div>
+                {% endif %}
+
+                <div class="card-body p-4">
+                    <h2 class="fw-bold mb-3">{{ course.title }}</h2>
+
+                    <!-- Course Details -->
+                    <div class="course-details text-muted mb-3 small">
+                        <p class="mb-1"><strong>Author:</strong> {{ course.author }}</p>
+                        {% if course.duration %}
+                        <p class="mb-1"><strong>Duration:</strong> {{ course.duration }}</p>
+                        {% endif %}
+                        {% if course.level %}
+                        <p class="mb-1"><strong>Level:</strong> {{ course.level }}</p>
+                        {% endif %}
+                    </div>
+
+                    <p class="text-muted mb-4">{{ course.description }}</p>
+
+                    <!-- Action Section -->
+                    {% if user.is_authenticated %}
+                        {% if is_enrolled %}
+                            <span class="badge bg-success py-2 px-3 fs-6 mb-3 d-inline-block">Enrolled</span>
+
+                            {% if course.video %}
+                            <!-- Play Video Button -->
+                            <button type="button" class="btn btn-primary btn-lg w-100 mb-3" data-bs-toggle="modal" data-bs-target="#videoModal">
+                                ▶ Play Course Video
+                            </button>
+                            {% endif %}
+
+                        {% else %}
+                            <a href="{% url 'enroll_course' course.id %}" class="btn btn-primary btn-lg w-100 btn-enroll">Enroll Now</a>
+                        {% endif %}
+                    {% else %}
+                        <a href="{% url 'login' %}?next={% url 'enroll_course' course.id %}" class="btn btn-outline-secondary btn-lg w-100">Login to Enroll</a>
+                    {% endif %}
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Video Modal -->
+{% if course.video and is_enrolled %}
+<div class="modal fade" id="videoModal" tabindex="-1" aria-labelledby="videoModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content rounded-4 overflow-hidden">
+      <div class="modal-header border-0">
+        <h5 class="modal-title" id="videoModalLabel">{{ course.title }} - Video</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body p-0">
+        <video id="courseVideo" width="100%" controls>
+            <source src="{{ course.video.url }}" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+      </div>
+    </div>
+  </div>
+</div>
+{% endif %}
+
+<style>
+/* Enroll button gradient (Udemy-style) */
+.btn-enroll {
+    background: linear-gradient(90deg, #4f46e5, #667eea);
+    border: none;
+    font-weight: 600;
+    transition: background 0.3s;
+}
+.btn-enroll:hover {
+    background: linear-gradient(90deg, #667eea, #4f46e5);
+}
+
+/* Card hover effect */
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+    transition: all 0.3s ease-in-out;
+}
+
+/* Video styling */
+video {
+    background-color: #000;
+    max-height: 500px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 576px) {
+    .modal-dialog {
+        max-width: 95%;
+    }
+}
+</style>
+
+<!-- Auto-pause video when modal closes -->
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const videoModal = document.getElementById('videoModal');
+    if(videoModal) {
+        videoModal.addEventListener('hidden.bs.modal', function () {
+            const video = document.getElementById('courseVideo');
+            if(video) {
+                video.pause();
+            }
+        });
+    }
+});
+</script>
+{% endblock %}

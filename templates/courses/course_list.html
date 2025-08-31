@@ -1,0 +1,116 @@
+{% extends "base.html" %}
+{% block content %}
+<h2 class="mb-4 fw-bold text-dark">Available Courses</h2>
+<div class="row g-3">
+  {% for course in courses %}
+  <div class="col-md-4 col-sm-6">
+    <div class="card h-100 shadow-sm rounded-3 border-0 position-relative course-card">
+      
+      {% if course.image %}
+        <a href="{% url 'course_detail' course.id %}" class="text-decoration-none text-dark">
+            <div class="card-img-container">
+                <img src="{{ course.image.url }}" class="card-img-top rounded-top-3" alt="{{ course.title }}">
+            </div>
+        </a>
+      {% endif %}
+
+      <div class="card-body d-flex flex-column p-3">
+        <a href="{% url 'course_detail' course.id %}" class="text-decoration-none text-dark">
+            <h5 class="card-title fw-semibold mb-2">{{ course.title }}</h5>
+            <p class="card-text text-muted mb-2">{{ course.description|truncatechars:100 }}</p>
+
+            <!-- New Details -->
+            <div class="course-details text-muted mb-3" style="font-size:0.85rem;">
+                <p class="mb-1"><strong>Author:</strong> {{ course.author }}</p>
+                {% if course.duration %}
+                <p class="mb-1"><strong>Duration:</strong> {{ course.duration }}</p>
+                {% endif %}
+                {% if course.lectures %}
+                <p class="mb-1"><strong>Lectures:</strong> {{ course.lectures }}</p>
+                {% endif %}
+                {% if course.level %}
+                <p class="mb-1"><strong>Level:</strong> {{ course.level }}</p>
+                {% endif %}
+            </div>
+        </a>
+
+        <div class="mt-auto">
+          {% if user.is_authenticated %}
+              {% if course.id in enrolled_courses %}
+                  <!-- Ribbon-style badge -->
+                  <div class="ribbon"><span>Enrolled</span></div>
+              {% else %}
+                  <a href="{% url 'enroll_course' course.id %}" class="btn btn-primary w-100 btn-enroll">Enroll</a>
+              {% endif %}
+          {% else %}
+              <a href="{% url 'login' %}?next={% url 'enroll_course' course.id %}" class="btn btn-outline-secondary w-100">Login to Enroll</a>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+  {% empty %}
+    <p>No courses available.</p>
+  {% endfor %}
+</div>
+
+<style>
+/* Card styling */
+.course-card {
+    transform: translateY(0);
+    transition: transform 0.3s, box-shadow 0.3s;
+    cursor: pointer;
+}
+.course-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 24px rgba(0,0,0,0.15);
+}
+
+/* Image container to control height */
+.card-img-container {
+    height: 150px; /* slightly smaller image */
+    overflow: hidden;
+}
+.card-img-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Enroll button gradient (Udemy-style) */
+.btn-enroll {
+    background: linear-gradient(90deg, #4f46e5, #667eea);
+    border: none;
+    font-weight: 500;
+    transition: background 0.3s;
+}
+.btn-enroll:hover {
+    background: linear-gradient(90deg, #667eea, #4f46e5);
+}
+
+/* Ribbon-style Enrolled badge */
+.ribbon {
+    width: 80px;
+    height: 80px;
+    overflow: hidden;
+    position: absolute;
+    top: -5px;
+    right: -5px;
+}
+.ribbon span {
+    position: absolute;
+    display: block;
+    width: 120px;
+    padding: 5px 0;
+    background: #28a745;
+    color: white;
+    font-weight: 600;
+    text-align: center;
+    transform: rotate(45deg);
+    top: 20px;
+    right: -30px;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.15);
+    font-size: 0.75rem;
+}
+</style>
+{% endblock %}

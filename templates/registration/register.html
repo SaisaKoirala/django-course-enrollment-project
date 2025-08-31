@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="row justify-content-center mt-5">
+  <div class="col-md-5">
+
+    <div class="card shadow-lg border-0 rounded-4 p-4">
+      <h3 class="text-center mb-4 fw-bold text-success">Register</h3>
+
+      <form method="post" class="needs-validation" novalidate>
+        {% csrf_token %}
+
+        <!-- Username -->
+        <div class="form-floating mb-3">
+          {{ form.username }}
+          <label for="{{ form.username.id_for_label }}">Username</label>
+          {% for error in form.username.errors %}
+          <div class="toast align-items-center text-bg-danger border-0 show mt-2" role="alert">
+            <div class="d-flex">
+              <div class="toast-body">
+                ❌ {{ error }}
+              </div>
+              <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+
+        <!-- Email -->
+        <div class="form-floating mb-3">
+          {{ form.email }}
+          <label for="{{ form.email.id_for_label }}">Email</label>
+          {% for error in form.email.errors %}
+          <div class="toast align-items-center text-bg-danger border-0 show mt-2" role="alert">
+            <div class="d-flex">
+              <div class="toast-body">
+                ❌ {{ error }}
+              </div>
+              <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+
+        <!-- Password -->
+        <div class="form-floating mb-3">
+          {{ form.password1 }}
+          <label for="{{ form.password1.id_for_label }}">Password</label>
+          {% for error in form.password1.errors %}
+          <div class="toast align-items-center text-bg-danger border-0 show mt-2" role="alert">
+            <div class="d-flex">
+              <div class="toast-body">
+                ❌ {{ error }}
+              </div>
+              <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+
+        <!-- Confirm Password -->
+        <div class="form-floating mb-3">
+          {{ form.password2 }}
+          <label for="{{ form.password2.id_for_label }}">Confirm Password</label>
+          {% for error in form.password2.errors %}
+          <div class="toast align-items-center text-bg-danger border-0 show mt-2" role="alert">
+            <div class="d-flex">
+              <div class="toast-body">
+                ❌ {{ error }}
+              </div>
+              <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+
+        <button type="submit" class="btn btn-success w-100 py-2 fw-semibold">
+          Register
+        </button>
+      </form>
+
+      <p class="mt-3 text-center">
+        Already have an account? <a href="{% url 'login' %}">Login here</a>
+      </p>
+    </div>
+
+  </div>
+</div>
+
+<!-- Initialize Bootstrap Toasts -->
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const toastElList = [].slice.call(document.querySelectorAll('.toast'))
+    toastElList.map(function(toastEl) {
+        const t = new bootstrap.Toast(toastEl, { delay: 4000 })
+        t.show()
+    })
+});
+</script>
+{% endblock %}

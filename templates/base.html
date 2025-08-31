@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Online Course Registration</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        /* Body background */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f6f8;
+            margin: 0;
+            padding-top: 70px; /* space for fixed navbar */
+        }
+
+        /* Navbar styling */
+        .navbar {
+            background-color: #1c1f25 !important;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            padding: 0.6rem 1rem;
+        }
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.6rem;
+            color: #ffffff !important;
+        }
+        .nav-link {
+            color: #d1d5db !important;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        .nav-link:hover {
+            color: #4f46e5 !important; /* Udemy-like purple */
+        }
+
+        /* Container cards and content */
+        .container {
+            max-width: 1200px;
+        }
+
+        /* Footer */
+        footer {
+            background-color: #1c1f25;
+            color: #d1d5db;
+            text-align: center;
+            padding: 1.2rem 0;
+            margin-top: 50px;
+            font-size: 0.9rem;
+        }
+
+        /* Links in footer */
+        footer a {
+            color: #4f46e5;
+            text-decoration: none;
+        }
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        @keyframes slideInRight {
+        from {
+            transform: translateX(100%);
+            opacity: 0;
+        }
+        to {
+            transform: translateX(0);
+            opacity: 1;
+        }
+        }
+
+        .toast.slide-in {
+        animation: slideInRight 0.6s ease forwards;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Toast container -->
+<div class="position-fixed top-0 end-0 p-3" style="z-index: 1100; margin-top: 70px;">
+  {% for message in messages %}
+    <div class="toast slide-in align-items-center 
+        {% if message.level_tag == 'error' %}text-bg-danger
+        {% elif message.level_tag == 'success' %}text-bg-success
+        {% elif message.level_tag == 'warning' %}text-bg-warning
+        {% else %}text-bg-primary{% endif %} 
+        border-0 mb-2" role="alert">
+      <div class="d-flex">
+        <div class="toast-body fw-semibold">
+          {{ message }}
+        </div>
+        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+      </div>
+    </div>
+  {% endfor %}
+</div>
+
+
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg fixed-top">
+  <div class="container">
+    <a class="navbar-brand" href="{% url 'course_list' %}">Online Course Registration</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ms-auto">
+        {% if user.is_authenticated %}
+          <li class="nav-item"><a class="nav-link" href="{% url 'my_courses' %}">My Courses</a></li>
+          <li class="nav-item"><a class="nav-link" href="{% url 'logout' %}">Logout</a></li>
+        {% else %}
+          <li class="nav-item"><a class="nav-link" href="{% url 'login' %}">Login</a></li>
+          <li class="nav-item"><a class="nav-link" href="{% url 'register' %}">Register</a></li>
+        {% endif %}
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- Main content -->
+<div class="container mt-4">
+    {% block content %}{% endblock %}
+</div>
+
+<!-- Footer -->
+<footer>
+    <p>© 2025 CourseHub. All rights reserved.</p>
+</footer>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
+
+
+
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    const toastElList = [].slice.call(document.querySelectorAll('.toast'))
+    toastElList.map(function(toastEl) {
+      const t = new bootstrap.Toast(toastEl, { delay: 3000 })
+      t.show()
+    })
+  });
+</script>
